@@ -1,0 +1,51 @@
+    private void Form1_Load(object sender, EventArgs e)
+    {
+        string myRegistryKey = Registry.CurrentUser.OpenSubKey(@"Software\\SAMP").GetValue("gta_sa_exe").ToString();
+        myRegistryKey = myRegistryKey.Substring(0, myRegistryKey.LastIndexOf(@"\") + 1);
+        label1.Text = myRegistryKey + "samp.exe";
+        textBox1.Text = Registry.CurrentUser.OpenSubKey(@"Software\SAMP", true).GetValue("PlayerName").ToString();
+        if (!File.Exists(myRegistryKey + "gta_sa.exe"))
+        {
+            MessageBox.Show("Nema gta_sa.exe vo GTA Folder\n" + myRegistryKey + "\nPreinstalirajte go SA-MP klientot, a ako problemot se pojavi pak preinstalirajte GTA.", "Greska", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+            base.Close();
+            Application.Exit();
+        }
+        else if (!File.Exists(myRegistryKey + "samp.exe"))
+        {
+            MessageBox.Show("Go nema samp.exe vo GTA Folderot:\n" + myRegistryKey + "\nPreinstalirajte go SA-MP Klientot.", "Greska", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+            base.Close();
+            Application.Exit();
+        }
+    }
+
+    private void button1_Click(object sender, EventArgs e)
+    {
+        string ServerIP = "176.57.128.242:7777 ";
+        string SPHash = "NbGWjfVeFdkDzjCym67lRw=="; //Tuka pisete Password za svoj server
+        string GTAPath = Registry.CurrentUser.OpenSubKey(@"Software\\SAMP").GetValue("gta_sa_exe").ToString();
+        GTAPath = GTAPath.Substring(0, GTAPath.LastIndexOf(@"\") + 1);
+        string[] ImaCheat1 = Directory.GetDirectories(GTAPath, "cleo");
+        string[] ImaCheat2 = Directory.GetFiles(GTAPath, "CLEO.asi");
+        string[] ImaCheat3 = Directory.GetFiles(GTAPath, "d3d9.dll");
+        string[] ImaCheat4 = Directory.GetFiles(GTAPath, "SAMPFUNCS.asi");
+        string[] ImaCheat5 = Directory.GetDirectories(GTAPath, "mod_sa");
+        string[] ImaCheat6 = Directory.GetDirectories(GTAPath, "OverLight_Mod");
+        string[] ImaCheat7 = Directory.GetFiles(GTAPath, "vorbishooked.dll");
+        if (((ImaCheat1.Length > 0) || (ImaCheat2.Length > 0)) || ((ImaCheat3.Length > 0) || (ImaCheat4.Length > 0)))
+        {
+            MessageBox.Show("Imate Cheat! Izbrisete go!", "Greska", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+        }
+        else if ((ImaCheat5.Length > 0) || (ImaCheat6.Length > 0))
+        {
+            MessageBox.Show("Imate Cheat! Izbrisete go!", "Greska", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+        }
+        else if (ImaCheat7.Length > 0)
+        {
+            MessageBox.Show("Imate Cheat! Izbrisete go!", "Greska", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+        }
+        else
+        {
+            Registry.CurrentUser.OpenSubKey(@"Software\SAMP", true).SetValue("PlayerName", textBox1.Text);
+            Process.Start(GTAPath + "samp.exe", ServerIP + SPHash);
+        }
+    }
